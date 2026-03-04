@@ -1,0 +1,98 @@
+############################
+# Environment Variables
+############################
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+############################
+# Python / FastAPI
+############################
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Python build
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs
+*.log
+
+############################
+# FastAPI / Uvicorn
+############################
+*.pid
+*.seed
+*.out
+*.err
+
+############################
+# Node / Next.js
+############################
+node_modules/
+.next/
+out/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+############################
+# Next.js specific
+############################
+.next/cache/
+.vercel/
+
+############################
+# IDE / Editor
+############################
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+############################
+# OS Files
+############################
+.DS_Store
+Thumbs.db
+
+############################
+# Testing
+############################
+coverage/
+htmlcov/
+.tox/
+.pytest_cache/
+
+############################
+# Misc
+############################
+*.sqlite3
+*.db
