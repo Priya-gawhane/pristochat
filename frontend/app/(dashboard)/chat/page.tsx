@@ -2,8 +2,8 @@
 
 export const dynamic = "force-dynamic";
 
-import { Suspense, useState, useRef, useEffect, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import ReactMarkdown from "react-markdown";
@@ -16,19 +16,8 @@ interface Message {
   content: string;
 }
 
-/* ✅ OUTER COMPONENT (WRAPPER) */
 export default function ChatPage() {
-  return (
-    <Suspense fallback={<div className="text-white p-4">Loading chat...</div>}>
-      <ChatInner />
-    </Suspense>
-  );
-}
-
-/* ✅ INNER COMPONENT (YOUR ACTUAL CODE) */
-function ChatInner() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const { refresh: refreshConversations } = useConversations();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -38,12 +27,14 @@ function ChatInner() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Auto-scroll
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
 
+  // ✅ FIX: Get query param safely (NO useSearchParams)
   const loadConversation = useCallback(async (id: string) => {
     try {
       const res = await API.get(`/chat/conversations/${id}/messages`);
@@ -55,7 +46,8 @@ function ChatInner() {
   }, []);
 
   useEffect(() => {
-    const id = searchParams.get("conv");
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("conv");
 
     if (id) {
       loadConversation(id);
@@ -63,7 +55,7 @@ function ChatInner() {
       setMessages([]);
       setConvId(null);
     }
-  }, [searchParams, loadConversation]);
+  }, [loadConversation]);
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || loading) return;
@@ -90,7 +82,7 @@ function ChatInner() {
 
       if (returnedConvId && !convId) {
         setConvId(returnedConvId);
-        router.replace(`/chat?conv=${returnedConvId}`, { scroll: false });
+        router.replace(`/chat?conv=${returnedConvId}`);
         await refreshConversations();
       }
 
