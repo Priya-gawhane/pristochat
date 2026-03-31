@@ -2,14 +2,12 @@
 
 export const dynamic = "force-dynamic";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { Suspense, useState, useRef, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import API from "@/lib/api";
 import { useConversations } from "@/contexts/ConversationsContext";
 
@@ -18,7 +16,17 @@ interface Message {
   content: string;
 }
 
+/* ✅ OUTER COMPONENT (WRAPPER) */
 export default function ChatPage() {
+  return (
+    <Suspense fallback={<div className="text-white p-4">Loading chat...</div>}>
+      <ChatInner />
+    </Suspense>
+  );
+}
+
+/* ✅ INNER COMPONENT (YOUR ACTUAL CODE) */
+function ChatInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -26,20 +34,16 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // ✅ FIX: initialize safely
   const [convId, setConvId] = useState<string | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // Load conversation
   const loadConversation = useCallback(async (id: string) => {
     try {
       const res = await API.get(`/chat/conversations/${id}/messages`);
@@ -50,7 +54,6 @@ export default function ChatPage() {
     }
   }, []);
 
-  // ✅ FIX: handle searchParams here (NOT in useState)
   useEffect(() => {
     const id = searchParams.get("conv");
 
