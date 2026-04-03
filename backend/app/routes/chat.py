@@ -49,7 +49,7 @@ def _require_conversation(conv_id: str, user_id):
 
 # ─── POST /chat/ ────────────────────────────────────────────────────────────
 
-@router.post("/")
+@router.post("/chat")
 def send_message(data: ChatRequest, email: str = Depends(verify_tokens)):
     user = _require_user(email)
     user_id = user["_id"]
