@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
+    "https://pristochat-fjg8.vercel.app",
     "http://127.0.0.1:3000",
 ]
 
