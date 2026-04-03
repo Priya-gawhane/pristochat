@@ -1,13 +1,12 @@
-from beanie import Document
-from pymongo import IndexModel
+"""
+User model schema for PristoChat.
 
-class User(Document):
-    name: str
-    email: str
-    password: str
-
-    class Settings:
-        name = "users"
-        indexes = [
-            IndexModel("email", unique=True)
-        ]
+Collection schema:
+  users:
+    _id        : ObjectId
+    name       : str
+    email      : str (unique)
+    password   : str (bcrypt hashed)
+    bio        : str (optional)
+    joined_at  : datetime
+"""

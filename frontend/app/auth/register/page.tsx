@@ -23,14 +23,20 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleRegister = async () => {
-    await API.post("/auth/register", {
-      name,
-      email,
-      password,
-    });
+  const [error, setError] = useState("");
 
-    router.push("/auth/login");
+  const handleRegister = async () => {
+    try {
+      setError("");
+      await API.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+      router.push("/auth/login");
+    } catch (e: any) {
+      setError(e.response?.data?.detail || "Registration failed");
+    }
   };
 
   return (
@@ -89,6 +95,7 @@ export default function Register() {
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
+          {error && <p className="text-red-500 text-sm w-full">{error}</p>}
           <Button type="submit" className="w-full" onClick={handleRegister}>
             Register
           </Button>

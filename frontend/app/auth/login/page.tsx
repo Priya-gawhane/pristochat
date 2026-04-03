@@ -20,18 +20,19 @@ import Link from "next/link";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleLogin = async () => {
     try {
+      setError("");
       await API.post("/auth/login", {
         email,
         password,
       });
-
       router.push("/chat");
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      setError(e.response?.data?.detail || "Login failed");
     }
   };
 
@@ -76,10 +77,10 @@ export default function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
+          {error && <p className="text-red-500 text-sm w-full">{error}</p>}
           <Button type="submit" className="w-full" onClick={handleLogin}>
             Login
           </Button>
-
         </CardFooter>
       </Card>
     </div>

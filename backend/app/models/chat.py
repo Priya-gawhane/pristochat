@@ -41,7 +41,8 @@ def new_conversation(user_id, title: str) -> dict:
 
 def new_message(conversation_id, user_id, role: str, content: str) -> dict:
     from datetime import datetime, timezone
-    assert role in ("user", "assistant"), "role must be 'user' or 'assistant'"
+    if role not in ("user", "assistant"):
+        raise ValueError("role must be 'user' or 'assistant'")
     return {
         "conversation_id": conversation_id,
         "user_id": user_id,

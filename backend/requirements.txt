@@ -2,6 +2,7 @@ fastapi
 uvicorn
 pymongo
 passlib[bcrypt]
+bcrypt
 python-jose[cryptography]
 python-dotenv
 requests

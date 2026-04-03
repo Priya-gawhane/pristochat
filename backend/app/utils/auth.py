@@ -38,6 +38,9 @@ def verify_tokens(request: Request):
             settings.SECRET_KEY,
             algorithms=[settings.ALGORITHM]
         )
-        return payload.get("sub")
+        email = payload.get("sub")
+        if not email:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        return email
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
